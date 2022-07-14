@@ -70,8 +70,20 @@ class Chunk extends DataWorker{
         return $this;
     }
 
-    public function where(...$where){
-        $this->where = $where;
+    public function where($col, $is, $what){
+        $this->where = ' WHERE '.trim($col).' = '.trim($is).' ?';
+
+        return $this;
+    }
+
+    public function or($col, $is, $what){
+        $this->where = ' OR '.trim($col).' '.trim($is).' ?';
+
+        return $this;
+    }
+
+    public function and($col, $is, $what){
+        $this->where = ' AND '.trim($col).' '.trim($is).' ?';
 
         return $this;
     }
@@ -82,10 +94,11 @@ class Chunk extends DataWorker{
         return $this;
     }
 
-    public function join(string $table2, string $table2_std_column, string $table1_std_column){
+    public function join(string $table2, string $table2_std_column, string $table1_std_column, string $type='LEFT OUTHER JOIN'){
         $this->join_data['table2'] = $table2;
         $this->join_data['table2_std'] = $table2_std_column;
         $this->join_data['table1_std'] = $table1_std_column;
+        $this->join_data['type'] = $type;
         
         return $this;
     }
@@ -103,7 +116,10 @@ class Chunk extends DataWorker{
     }
 
     public function gather(){
-        //TODO
+        $this->SQLBuilder();
+        $this->Execute()->fetchAll();
+        
+        return $this;
     }
 
     public function pull(){
