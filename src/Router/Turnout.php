@@ -1,5 +1,5 @@
 <?php
-namespace Henrietta\Router;
+namespace Fratello\Henrietta\Router;
 /*
 * Main routing system
 */

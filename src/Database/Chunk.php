@@ -1,5 +1,5 @@
 <?php
-namespace Henrietta\Database;
+namespace Fratello\Henrietta\Database;
 
 use Henrietta\Database\DataWorker;
 
@@ -12,16 +12,16 @@ class Chunk extends DataWorker{
         return $me;
     }
 
-    public static function create_table(){
-        //TODO
-    }
+    public static function raw_sql(string $SQL, array $params = []){
+        $stmt = $this->PDO->prepare($SQL);
+        if(count($params) != 0){
+            $stmt->execute($params);
+        }else{
+            $stmt->execute();
+        }
+        $this->stmt = $stmt;
 
-    public static function create_database(){
-        //TODO
-    }
-
-    public static function raw_sql($SQL, $params){
-        //TODO
+        return $this;
     }
 
     public function __construct(){
@@ -40,6 +40,24 @@ class Chunk extends DataWorker{
         return $this;
     }
 
+    public function sum(string $set_col_name = 'SummedColumn'){
+        array_push($this->col, 'SUM('.$set_col_name.')');
+
+        return $this;
+    }
+
+    public function max(string $set_col_name = 'SummedColumn'){
+        array_push($this->col, 'MAX('.$set_col_name.')');
+        
+        return $this;
+    }
+
+    public function min(string $set_col_name = 'SummedColumn'){
+        array_push($this->col, 'MIN('.$set_col_name.')');
+
+        return $this;
+    }
+
     public function select(){
         $this->type = 'SELECT';
 
@@ -47,7 +65,7 @@ class Chunk extends DataWorker{
     }
 
     public function insert(){
-        $this->type = 'INSERT INTO';
+        $this->type = 'INSERT';
 
         return $this;
     }
@@ -58,8 +76,9 @@ class Chunk extends DataWorker{
         return $this;
     }
 
-    public function delete(){
+    public function delete(int $limit = 0){
         $this->type = 'DELETE';
+        $this->del_limit = $limit;
 
         return $this;
     }
@@ -118,6 +137,18 @@ class Chunk extends DataWorker{
         return $this;
     }
 
+    public function raw_gather(){
+        $this->stmt->fetchAll();
+        
+        return $this;
+    }
+
+    public function raw_pull(){
+        $this->stmt->fetch();
+
+        return $this;
+    }
+
     public function gather(){
         $this->SQLBuilder();
         $this->Execute()->fetchAll();
@@ -132,40 +163,31 @@ class Chunk extends DataWorker{
         return $this;
     }
 
-    public function catch(){
-        //TODO
+    public function catch(string $column){
+        $this->col = [$column];
+        $this->SQLBuilder();
+        $this->Execute()->fetch();
+
+        return $this;
     }
 
-    public function reap(){
-        //TODO
+    public function reap(string $column){
+        $this->col = [$column];
+        $this->SQLBuilder();
+        $this->Execute()->fetchAll();
+
+        return $this;
+    }
+
+    public function perform(){
+        $this->SQLBuilder();
+        $this->Execute();
+
+        return $this;
     }
 
     public function get_subquery(){
         return self::$SubQuery;
-    }
-
-    public function is_in(){
-        //TODO
-    }
-
-    public function is_not_in(){
-        //TODO
-    }
-
-    public function sum(){
-        //TODO
-    }
-
-    public function max(){
-        //TODO
-    }
-
-    public function mean(){
-        //TODO
-    }
-
-    public function last_insert_id(){
-        //TODO
     }
 
     public function sub_query(){
@@ -179,5 +201,29 @@ class Chunk extends DataWorker{
         $this->SQLBuilder();
         
         return $this;
+    }
+
+    public function is_in(){
+        if($this->count_row() === 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function is_not_in(){
+        if($this->is_in()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function last_insert_id(){
+        return $this->pdo->lastInsertId();
+    }
+
+    public function count_row(){
+        return $this->stmt->rowCount();
     }
 }

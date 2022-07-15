@@ -1,5 +1,5 @@
 <?php
-namespace Henrietta\Session;
+namespace Fratello\Henrietta\Session;
 
 use Henrietta\Tools\UUID;
 use Dotenv\Dotenv;

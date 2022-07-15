@@ -1,5 +1,5 @@
 <?php
-namespace Henrietta\Collection;
+namespace Fratello\Henrietta\Collection;
 
 use ArrayAccess;
 use ArrayIterator;

@@ -1,5 +1,5 @@
 <?php
-namespace Henrietta\Router;
+namespace Fratello\Henrietta\Router;
 /*
 * HTTP ACCESS METHOD SETTING
 */
@@ -10,7 +10,7 @@ class Method{
             $router = new Turnout($routing);
             $result = $router->RouterCore();
             if($result){
-                $function();
+                return [$this->RouteVariable(), $function];
             }else{
                 return false;
             }
@@ -24,7 +24,7 @@ class Method{
             $router = new Turnout($routing);
             $result = $router->RouterCore();
             if($result){
-                $function($router->RouteVariable());
+                return [$this->RouteVariable(), $function];
             }else{
                 return false;
             }
@@ -38,7 +38,7 @@ class Method{
             $router = new Turnout($routing);
             $result = $router->RouterCore();
             if($result){
-                $function();
+                return [$this->RouteVariable(), $function];
             }else{
                 return false;
             }
@@ -52,7 +52,7 @@ class Method{
             $router = new Turnout($routing);
             $result = $router->RouterCore();
             if($result){
-                $function();
+                return [$this->RouteVariable(), $function];
             }else{
                 return false;
             }
@@ -65,7 +65,7 @@ class Method{
         $router = new Turnout($routing);
         $result = $router->RouterCore();
         if($result){
-            $function();
+            return [$this->RouteVariable(), $function];
         }else{
             return false;
         }

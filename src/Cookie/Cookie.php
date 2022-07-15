@@ -1,5 +1,5 @@
 <?php
-namespace Henrietta\Cookie;
+namespace Fratello\Henrietta\Cookie;
 
 class Cookie{
     private static $options = [];

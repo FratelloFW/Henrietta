@@ -1,5 +1,5 @@
 <?php
-namespace Henrietta\Tools;
+namespace Fratello\Henrietta\Tools;
 
 class UUID{
     const PATTERN = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
