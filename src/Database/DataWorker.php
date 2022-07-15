@@ -7,7 +7,7 @@ class DataWorker{
     protected $col;
     protected $type;
     protected $where;
-    protected $where_data;
+    protected $where_data = [];
     protected $set_data;
     protected $join_data;
     protected $group_by;
@@ -50,7 +50,7 @@ class DataWorker{
         $stmt = $this;
         if($this->type === 'SELECT'){
             $stmt = $this->PDO->prepare($this->SQL);
-            $stmt->execute($this->where);
+            $stmt->execute($this->where_data);
         }
 
         return $stmt;

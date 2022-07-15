@@ -72,18 +72,21 @@ class Chunk extends DataWorker{
 
     public function where($col, $is, $what){
         $this->where = ' WHERE '.trim($col).' = '.trim($is).' ?';
+        array_push($this->where_data, $what);
 
         return $this;
     }
 
     public function or($col, $is, $what){
         $this->where = ' OR '.trim($col).' '.trim($is).' ?';
+        array_push($this->where_data, $what);
 
         return $this;
     }
 
     public function and($col, $is, $what){
         $this->where = ' AND '.trim($col).' '.trim($is).' ?';
+        array_push($this->where_data, $what);
 
         return $this;
     }
@@ -109,7 +112,7 @@ class Chunk extends DataWorker{
         return $this;
     }
 
-    public function order_by(array $order_type){
+    public function order_by(...$order_type){
         $this->order_by = $order_type;
 
         return $this;
@@ -123,7 +126,10 @@ class Chunk extends DataWorker{
     }
 
     public function pull(){
-        //TODO
+        $this->SQLBuilder();
+        $this->Execute()->fetch();
+
+        return $this;
     }
 
     public function catch(){
